@@ -1,1 +1,49 @@
-# CS1411-Connect-4-AI-Bot
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/6e56oMF4)
+
+# Assignment 2: Adversarial Search README
+
+## A brief paragraph summarizing your implementation and highlighting the outcomes of all tests
+In this assignment, I implemented the minimax and alpha-beta pruning algorithms that can solve adversarials games that follows the HeuristicAdversarialSearchProblem structure, such as Tic-Tac-Toe and Connect 4. The algorithms compute the value of a game state and a speicfied depth, and propogate those values upwards in a game tree, alternating between taking the minimum or the maximum of all the possible next state values for a given current state. While the algorithms are similar, alpha-beta pruning takes an additional, efficiency improving step of using alpha (saved maximum score of maximer) and beta (saved minimum score of minimizer) cutoff values to "prune" or not look down certain branches of the game tree that a minimizer/maximizer would not take. The value of a given game state is determined by that adverserial game's heuristic, which must follow the heuristic abstract method declared in ```heuristic_adversarial_search_problem.py```. In this assignment, I also implement a heuristic function for Tic-Tac-Toe that returns the value of a TTT game of any size, looking for potential player wins across the rows, columns, and diagonals of a board.
+
+Along with the basic test cases, I ran the following tests on my implementations in ```unit_tests.py```.
+1. ```test_minimax_optimal_action``` - Tests minimax on a GameDAG for known optimal action.
+Outcome: Success, minimax returned the optimal action that leads to the best outcome in the basic game tree.
+2. ```test_alpha_beta_optimal_action``` - Tests alpha-beta pruning on a GameDAG for known optimal action.
+Outcome: Success, alpha-beta returned the optimal action, having the same result as minimax on the same DAG.
+3. ```test_minimax_ttt_optimal_action``` - Tests minimax on a Tic-Tac-Toe state for known optimal action (a win!).
+Outcome: Success, minimax correctly identified optimal action for Player 1 to place a piece in the corner (2, 2) to win the game.
+4. ```test_alpha_beta_ttt_optimal_action``` - Test alpha-beta pruning on a Tic-Tac-Toe state,for known optimal actionn.
+Outcome: Success, alpha-beta correctly identified optimal action Player 1 (X) to place a piece in the corner (2, 2) to win the game.
+5. ```test_minimax_connect_four_optimal_action``` - Test minimax on a Connect 4 state with winning next move.
+Outcome: Success, minimax correctly identified the optimal action for Player 2 to drop a piece in column 6 and win the game.
+6. ```test_alpha_beta_connect_four_optimal_action``` - Test alpha-beta on a Connect 4 state with winning next move.
+Outcome: Success, alpha-beta correctly identified the optimal action for Player 2 to drop a piece in column 6 and win the game.
+7. ```test_TTT_4x4_heur_and_minimax_optimal``` - Test minimax for optimal action on a 4x4 Tic-Tac-Toe state for Player 2. This test case ensures that the implemented TTT heuristic works correctly for different, larger board dimensions, that minimax returns the optimal action, AND that the algorithm works on a minimizing player. Outcome: Success, minimax returned (2,1) optimal action on the 4x4 TTT board.
+8. ```test_TTT_4x4_heur_and_alpha_beta_optimal``` - Test minimax for optimal action on a 4x4 Tic-Tac-Toe state for Player 2. This test case ensures that the implemented TTT heuristic works correctly for different, larger board dimensions, that alpha-beta returns the optimal action, AND that the algorithm works on a minimizing player. Outcome: Success, alpha-beta returned (2,1) optimal action on a 4x4 TTT board.
+9. ```test_TTT_5x5_heur_and_minimax_optimal```- Test minimax for optimal action on a 4x4 Tic-Tac-Toe state for Player 1. This test case ensures that the implemented TTT heuristic works correctly for different, larger board dimensions AND that minimax returns the optimal action. Outcome: Success, minimax returned (4,4) optimal action on the 5x5 TTT board.
+10. ```test_TTT_5x5_heur_and_alpha_beta_optimal``` - Test alpha-beta pruning for optimal action on a 5x5 Tic-Tac-Toe state for Player 1. This test case ensures that the implemented TTT heuristic works correctly for different, larger board dimensions AND that alpha-beta pruning returns the optimal action. Outcome: Success, minimax returned (4,4) optimal action on the 5x5 TTT board.
+
+
+## Solutions to any conceptual questions 
+**Task 4**: Points awarded for thoughtful comparison of Minimax and 𝛼𝛽 -pruning, using evidence from the graphs provided. (NOTE: EdStem Post #231 says 'No need to submit the graphs, just analyze the graph we give you'.)
+
+*What do you think? Are you convinced by Steve's experiment? Why or why not?*
+I am not neccesarily convinced by Steve's two game experiement; I don't think that alpha-beta pruning algorithm can produce a better outcome / win more / find a better optimal action than the minimax algorithm. This is because by looking at Steve's figure (**Figure 1**), on the top left quandrant, when the minimax cutoff depth is in the 3's and 4's while the alpha-beta cutoff depth is at the 1's and 2's, th minimax player is ALSO winning its 2 out of the 2 games compared to the alpha-beta player, which is the exact same thing that would happen if we were to switch the roles giving the alpha-beta player cutoff depth in the 3/4's and the minimax player cutoff depths in the 1/2's; the alpha-beta player then also wins their 2 out of 2 games. This implies that the 2 algorithms are 'equal' (or in Alex's words, indistinguishable) when it comes to the ability of win (aka the performance score). When both players are set to the higher depths of 3/4's the minimax player is winnning but it could be due to chance because of the small sample size of two games.
+
+*Can you find a flaw in Steve's reasoning?*
+Steve argued that we don't need to increase the sample size to 100 tournaments in order to test the two algorithms, because the results of the algorithms and game were deterministic. A flaw in this reasoning is that whiles the algorithms and game is deterministic and not random, there is still a lot of game variability in the final outcome of said game. There are many different starting conditions that can create various different the outcome in Connect 4, meaning that a sample size of 2 is still not representatitve of the full range of game states and scenarios that the two algorithms could encounter.
+
+Thus, the argument that the two algoirhtms abilities to win more games are indistinguishable is strengthened a bit when we increase the number of trials in the minimax player VS alpha-beta player experiment from 2 games to 200 games. With this wider range of game states, scenarios, and strategies, we see that the minimax and alpha-beta players had similar performance score. We see that in Alex's figure, **Figure 2**, on the the top left quadrant of the figure when the minimax player is given a higher cutoff depth of 3 or 4 and the alpha-beta player has depth of 1 or 2, the minimax players wins all 200 games; and when the alpha-beta player gets the 3 or 4 cutoff depth while the the minimax players gets the 1 or 2 cutoff depth, the alpha-beta player wins all 200 games. The two algorithms have similar performance scores in this experiment as well. Whichever algorithm gets the higher cutoff depth wins, But what happens when they both have the same cutoff depth and are playing against each other in a game? To answer this inquiry, I looked along the diagonal of **Figure 2** and noticed that minimax is winning 7/200 for the games where both players have cutoff depth 3, and 4/200 games where both players have a cutoff depth of 4. This corresponds to 2% and 3%, so this slight discrepancy in performance that minimax has above alpha-beta may just be due to game variability given that there are 4.5 trillion ways a Connect 4 game can be completed (https://www.rd.com/article/how-to-win-connect-4/). 
+
+*Now are you convinced? Explain why or why not in a brief paragraph in your README*
+However, I am convinced that alpha-beta pruning has a better efficiency than minimax. That is, alpha-beta and minimax are both "optimal" and does not outperform minimax in terms of game-winning performance, but alpha-beta pruning does outperform in terms of efficiency. Efficiency here is measured as the number of states expanded (more states expanded would require more runtime and space resources). Looking at Steve's plot (**Figure 3**), we can see that for the 200/200 games taht alpha-beta is winning at depth 3 nd 4, alpha-beta only expands LESS THAN 50,000 states while minimax has to consistently expand to more states that alpha-beta at the same depths of 3 and 4, with minimax games at depth 4 having a much higher states expanded of any other point on the graph, at 350,000. Thus, given that all the alpha-beta plots lie on the <50000 states expanded side of the plot nad for the same peformance scores alpha-beta consistently has less states explored than minimax, I am convinced that alpha-beta pruning is better than minmax only in terms of efficiency. This makes sense given that alpha-beta pruning literally prunes subtrees, looking down fewer child states compared to minimax.
+
+## Known problems in the code
+There are no known bugs.
+
+## Anyone you worked with
+I did not work with anyone on this assignment.
+
+## Any outside resources used 
+I referenced my CS17 Game Project implementation of minimax for the minimax function. 
+I used this YouTube explanation of Alpha-Beta Pruning on a Connect 4 game for clarification on the algorithm. https://www.youtube.com/watch?v=DV5d31z1xTI&t=407s 
